@@ -4,273 +4,472 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>لوحة التحكم - مصرف الامان</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
-    
     :root {
-      --green-dark: #1a5f3c;
-      --green-light: #2d8a5e;
-      --green-border: #4db87a;
-      --orange: #e67e22;
-      --red: #e74c3c;
+      --primary: #1a5f3c;
+      --primary-light: #2d8a5e;
+      --primary-lighter: #4db87a;
       --bg: #f5f7fa;
       --card-bg: #ffffff;
       --text: #2c3e50;
       --text-light: #7f8c8d;
+      --border: #e0e0e0;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --danger: #e74c3c;
     }
-    
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
+
     body {
       font-family: 'Tajawal', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
     }
-    
-    /* LOGIN SCREEN */
-    .login-screen {
+
+    /* Layout */
+    .app-container {
       display: flex;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-light) 100%);
     }
-    
-    .login-box {
-      background: var(--card-bg);
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 400px;
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--primary);
+      color: white;
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 25px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       text-align: center;
     }
-    
-    .login-box h1 {
-      color: var(--green-dark);
-      margin-bottom: 10px;
-      font-size: 28px;
-    }
-    
-    .login-box p {
-      color: var(--text-light);
-      margin-bottom: 30px;
-    }
-    
-    .login-box input {
-      width: 100%;
-      padding: 15px;
-      margin-bottom: 15px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: inherit;
-      transition: border-color 0.3s;
-    }
-    
-    .login-box input:focus {
-      outline: none;
-      border-color: var(--green-border);
-    }
-    
-    .login-box button {
-      width: 100%;
-      padding: 15px;
-      background: var(--green-dark);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
+
+    .sidebar-header h2 {
+      font-size: 22px;
       font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .sidebar-header p {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .nav-menu {
+      padding: 20px 0;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      transition: all 0.3s ease;
       cursor: pointer;
-      transition: background 0.3s;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      font-size: 15px;
     }
-    
-    .login-box button:hover {
-      background: var(--green-light);
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      padding-right: 30px;
     }
-    
-    .error-msg {
-      color: var(--red);
-      margin-top: 10px;
-      font-size: 14px;
+
+    .nav-item i {
+      width: 25px;
+      margin-left: 12px;
+      font-size: 18px;
     }
-    
-    /* DASHBOARD */
-    .dashboard {
-      display: none;
-      padding: 20px;
-      max-width: 1400px;
-      margin: 0 auto;
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-right: 260px;
+      padding: 30px;
     }
-    
-    .dashboard-header {
+
+    /* Top Header */
+    .top-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
       padding-bottom: 20px;
-      border-bottom: 2px solid #e0e0e0;
+      border-bottom: 1px solid var(--border);
     }
-    
-    .dashboard-header h1 {
-      color: var(--green-dark);
-      font-size: 28px;
+
+    .top-header h1 {
+      font-size: 26px;
+      color: var(--primary);
     }
-    
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
     .logout-btn {
-      padding: 10px 20px;
-      background: var(--red);
+      background: var(--danger);
       color: white;
       border: none;
+      padding: 10px 20px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 600;
+      font-family: inherit;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s;
     }
-    
-    /* STATS CARDS */
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
+      gap: 25px;
       margin-bottom: 30px;
     }
-    
+
     .stat-card {
       background: var(--card-bg);
-      padding: 25px;
       border-radius: 15px;
+      padding: 25px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    
-    .stat-card h3 {
-      color: var(--text-light);
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .stat-icon.visitors { background: rgba(39, 174, 96, 0.1); color: var(--success); }
+    .stat-icon.messages { background: rgba(230, 126, 34, 0.1); color: var(--warning); }
+    .stat-icon.users { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+    .stat-icon.online { background: rgba(155, 89, 182, 0.1); color: #9b59b6; }
+
+    .stat-info h3 {
       font-size: 14px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 5px;
     }
-    
-    .stat-value {
-      font-size: 36px;
+
+    .stat-info .number {
+      font-size: 32px;
       font-weight: 700;
-      color: var(--green-dark);
+      color: var(--text);
     }
-    
-    /* DATA TABLE */
-    .data-section {
+
+    /* Content Sections */
+    .content-section {
       background: var(--card-bg);
-      padding: 25px;
       border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     }
-    
-    .data-section h2 {
-      color: var(--green-dark);
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
-      font-size: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border);
     }
-    
+
+    .section-header h2 {
+      font-size: 20px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+    }
+
     .data-table {
       width: 100%;
       border-collapse: collapse;
     }
-    
+
     .data-table th,
     .data-table td {
-      padding: 12px;
+      padding: 15px;
       text-align: right;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--border);
     }
-    
+
     .data-table th {
       background: var(--bg);
-      color: var(--green-dark);
-      font-weight: 700;
+      font-weight: 600;
+      color: var(--primary);
     }
-    
+
     .data-table tr:hover {
-      background: #f9f9f9;
+      background: var(--bg);
     }
-    
-    .no-data {
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-success { background: rgba(39, 174, 96, 0.1); color: var(--success); }
+    .badge-warning { background: rgba(230, 126, 34, 0.1); color: var(--warning); }
+    .badge-info { background: rgba(52, 152, 219, 0.1); color: #3498db; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(100%);
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-right: 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .data-table {
+        font-size: 14px;
+      }
+      
+      .data-table th,
+      .data-table td {
+        padding: 10px;
+      }
+    }
+
+    /* Loading State */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+
+    .loading i {
+      margin-left: 10px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Empty State */
+    .empty-state {
       text-align: center;
       padding: 40px;
       color: var(--text-light);
     }
-    
-    /* LOADING */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px;
-    }
-    
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #e0e0e0;
-      border-top-color: var(--green-dark);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      opacity: 0.5;
     }
   </style>
 </head>
 <body>
-  <!-- LOGIN SCREEN -->
+  <!-- Login Screen -->
   <div class="login-screen" id="loginScreen">
     <div class="login-box">
-      <h1>🔐 لوحة التحكم</h1>
-      <p>مصرف الامان - نظام الإدارة</p>
-      <input type="text" id="username" placeholder="اسم المستخدم" />
-      <input type="password" id="password" placeholder="كلمة المرور" />
-      <button onclick="login()">تسجيل الدخول</button>
-      <div class="error-msg" id="loginError"></div>
+      <h1>🔐 تسجيل الدخول</h1>
+      <p>لوحة تحكم مصرف الامان</p>
+      <input type="text" id="username" placeholder="اسم المستخدم" value="admin"/>
+      <input type="password" id="password" placeholder="كلمة المرور" value="admin123"/>
+      <button onclick="login()">
+        <i class="fas fa-sign-in-alt"></i>
+        دخول
+      </button>
+      <p id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;">اسم المستخدم أو كلمة المرور غير صحيحة</p>
     </div>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="dashboard" id="dashboard">
-    <div class="dashboard-header">
-      <h1>📊 لوحة التحكم - مصرف الامان</h1>
-      <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
-    </div>
-    
-    <div class="stats-grid">
-      <div class="stat-card">
-        <h3>إجمالي الزوار</h3>
-        <div class="stat-value" id="totalVisitors">0</div>
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard" style="display: none;">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>🏦 مصرف الامان</h2>
+        <p>لوحة التحكم</p>
       </div>
-      <div class="stat-card">
-        <h3>الزوار اليوم</h3>
-        <div class="stat-value" id="todayVisitors">0</div>
-      </div>
-      <div class="stat-card">
-        <h3>الرسائل</h3>
-        <div class="stat-value" id="totalMessages">0</div>
-      </div>
-    </div>
-    
-    <div class="data-section">
-      <h2>📋 بيانات الزوار</h2>
-      <div id="visitorsTable">
-        <div class="loading">
-          <div class="spinner"></div>
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" onclick="showSection('overview')">
+          <i class="fas fa-chart-line"></i>
+          <span>نظرة عامة</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('visitors')">
+          <i class="fas fa-users"></i>
+          <span>الزوار</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('messages')">
+          <i class="fas fa-envelope"></i>
+          <span>الرسائل</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('settings')">
+          <i class="fas fa-cog"></i>
+          <span>الإعدادات</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <h1>📊 لوحة التحكم</h1>
+        <div class="header-actions">
+          <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            تسجيل الخروج
+          </button>
+        </div>
+      </header>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon visitors">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h3>إجمالي الزوار</h3>
+            <div class="number" id="totalVisitors">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon messages">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="stat-info">
+            <h3>الرسائل</h3>
+            <div class="number" id="totalMessages">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon users">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="stat-info">
+            <h3>المستخدمين</h3>
+            <div class="number" id="totalUsers">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon online">
+            <i class="fas fa-signal"></i>
+          </div>
+          <div class="stat-info">
+            <h3>الحالة</h3>
+            <div class="number" style="font-size: 18px; color: var(--success);">متصل</div>
+          </div>
         </div>
       </div>
-    </div>
+
+      <!-- Visitors Section -->
+      <div class="content-section" id="visitorsSection">
+        <div class="section-header">
+          <h2><i class="fas fa-users"></i> سجل الزوار</h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>الوقت</th>
+                <th>الجهاز</th>
+                <th>المتصفح</th>
+                <th>الصفحة</th>
+              </tr>
+            </thead>
+            <tbody id="visitorsTableBody">
+              <tr><td colspan="5" class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Messages Section -->
+      <div class="content-section" id="messagesSection" style="display: none;">
+        <div class="section-header">
+          <h2><i class="fas fa-envelope"></i> الرسائل الواردة</h2>
+        </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>التاريخ</th>
+                <th>الاسم</th>
+                <th>البريد</th>
+                <th>الرسالة</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="messagesTableBody">
+              <tr><td colspan="5" class="loading"><i class="fas fa-spinner"></i> جاري التحميل...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
 
   <!-- Firebase SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAfKhdBfFZBx7VRnBFV9EUCCrigFKIBXd8",
@@ -278,47 +477,47 @@
       databaseURL: "https://amnbnk-new-default-rtdb.firebaseio.com",
       projectId: "amnbnk-new",
       storageBucket: "amnbnk-new.firebasestorage.app",
-      messagingSenderId: "968970004871",
-      appId: "1:968970004871:web:0646198bd6c861bc8b0b22",
-      measurementId: "G-FWWV8ZEL5H"
+      messagingSenderId: "776184194637",
+      appId: "1:776184194637:web:85a1d3c4232fee2a33b8fd"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Make db available globally for the login functions
     window.firebaseDB = db;
     window.firebaseRef = ref;
     window.firebaseOnValue = onValue;
-    window.firebaseGet = get;
+
+    loadDashboardData();
   </script>
 
   <script>
-    // Admin credentials
-    const ADMIN_USER = 'admin';
-    const ADMIN_PASS = 'admin123';
-
     function login() {
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      const errorDiv = document.getElementById('loginError');
-
-      if (username === ADMIN_USER && password === ADMIN_PASS) {
+      
+      if (username === 'admin' && password === 'admin123') {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        localStorage.setItem('adminLoggedIn', 'true');
         loadDashboardData();
       } else {
-        errorDiv.textContent = 'بيانات غير صحيحة';
+        document.getElementById('loginError').style.display = 'block';
       }
     }
 
     function logout() {
-      document.getElementById('loginScreen').style.display = 'flex';
+      localStorage.removeItem('adminLoggedIn');
       document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('username').value = '';
-      document.getElementById('password').value = '';
-      document.getElementById('loginError').textContent = '';
+      document.getElementById('loginScreen').style.display = 'flex';
     }
+
+    window.addEventListener('load', function() {
+      if (localStorage.getItem('adminLoggedIn') === 'true') {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      }
+    });
 
     function loadDashboardData() {
       const db = window.firebaseDB;
@@ -326,64 +525,71 @@
       const onValue = window.firebaseOnValue;
 
       if (!db) {
-        console.error('Firebase not initialized');
+        setTimeout(loadDashboardData, 1000);
         return;
       }
 
-      // Load visitors count
       const visitorsRef = ref(db, 'visitors');
       onValue(visitorsRef, (snapshot) => {
-        const data = snapshot.val();
-        let total = 0;
-        let today = 0;
-        const todayStr = new Date().toISOString().split('T')[0];
-
-        if (data) {
-          Object.values(data).forEach(visitor => {
-            total++;
-            if (visitor.date === todayStr) today++;
+        const count = snapshot.size || 0;
+        document.getElementById('totalVisitors').textContent = count;
+        
+        const tbody = document.getElementById('visitorsTableBody');
+        if (count === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-inbox"></i><br>لا يوجد زوار بعد</td></tr>';
+        } else {
+          let html = '';
+          const visitors = [];
+          snapshot.forEach((child) => {
+            visitors.push(child.val());
           });
+          visitors.slice(-10).reverse().forEach((v) => {
+            html += '<tr><td>' + (v.date || '-') + '</td><td>' + (v.time || '-') + '</td><td>' + (v.device || '-') + '</td><td>' + (v.browser || '-') + '</td><td>' + (v.page || '-') + '</td></tr>';
+          });
+          tbody.innerHTML = html;
         }
-
-        document.getElementById('totalVisitors').textContent = total;
-        document.getElementById('todayVisitors').textContent = today;
-        renderVisitorsTable(data);
       });
 
-      // Load messages count
       const messagesRef = ref(db, 'messages');
       onValue(messagesRef, (snapshot) => {
-        const data = snapshot.val();
-        document.getElementById('totalMessages').textContent = data ? Object.keys(data).length : 0;
+        const count = snapshot.size || 0;
+        document.getElementById('totalMessages').textContent = count;
+        
+        const tbody = document.getElementById('messagesTableBody');
+        if (count === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><i class="fas fa-inbox"></i><br>لا توجد رسائل</td></tr>';
+        } else {
+          let html = '';
+          const messages = [];
+          snapshot.forEach((child) => {
+            messages.push(child.val());
+          });
+          messages.slice(-10).reverse().forEach((m) => {
+            html += '<tr><td>' + (m.date || '-') + '</td><td>' + (m.name || '-') + '</td><td>' + (m.email || '-') + '</td><td>' + (m.message ? m.message.substring(0, 50) + '...' : '-') + '</td><td><span class="badge badge-success">جديد</span></td></tr>';
+          });
+          tbody.innerHTML = html;
+        }
       });
     }
 
-    function renderVisitorsTable(data) {
-      const container = document.getElementById('visitorsTable');
+    function showSection(section) {
+      document.getElementById('visitorsSection').style.display = 'none';
+      document.getElementById('messagesSection').style.display = 'none';
       
-      if (!data || Object.keys(data).length === 0) {
-        container.innerHTML = '<div class="no-data">لا توجد بيانات زوار حالياً</div>';
-        return;
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      
+      if (section === 'overview') {
+        document.getElementById('visitorsSection').style.display = 'block';
+        document.querySelector('.nav-item:nth-child(1)').classList.add('active');
+      } else if (section === 'visitors') {
+        document.getElementById('visitorsSection').style.display = 'block';
+        document.querySelector('.nav-item:nth-child(2)').classList.add('active');
+      } else if (section === 'messages') {
+        document.getElementById('messagesSection').style.display = 'block';
+        document.querySelector('.nav-item:nth-child(3)').classList.add('active');
+      } else if (section === 'settings') {
+        document.querySelector('.nav-item:nth-child(4)').classList.add('active');
       }
-
-      const visitors = Object.entries(data).map(([id, v]) => ({ id, ...v }));
-      visitors.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
-
-      let html = '<table class="data-table"><thead><tr>';
-      html += '<th>التاريخ</th><th>الوقت</th><th>الجهاز</th><th>المتصفح</th><th>IP</th>';
-      html += '</tr></thead><tbody>';
-
-      visitors.slice(0, 50).forEach(v => {
-        const date = v.date || '-';
-        const time = v.time || '-';
-        const device = v.device || 'غير معروف';
-        const browser = v.browser || 'غير معروف';
-        const ip = v.ip || '-';
-        html += '<tr><td>' + date + '</td><td>' + time + '</td><td>' + device + '</td><td>' + browser + '</td><td>' + ip + '</td></tr>';
-      });
-
-      html += '</tbody></table>';
-      container.innerHTML = html;
     }
   </script>
 </body>
