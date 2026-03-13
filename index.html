@@ -508,60 +508,47 @@
 </script>
 
 
-  <!-- VISITOR TRACKING -->
+  <!-- VISITOR TRACKING - Simplified -->
   <script type="module">
-    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    import { getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     
-    // Get the existing db instance from the main firebase module
-    const dbModule = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-    
-    // We need to get the db from the main script - let's use a different approach
-    // Wait for the main firebase to initialize
-    setTimeout(async () => {
-      try {
-        // Import firebase app to get the default app
-        const { getApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-        const { getDatabase, ref, push } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js");
-        
-        const app = getApp();
-        const db = getDatabase(app);
-        
-        // Get visitor info
-        const userAgent = navigator.userAgent;
-        const device = /Mobile|Android|iPhone|iPad|iPod/.test(userAgent) ? 'Mobile' : 'Desktop';
-        const browser = getBrowser(userAgent);
-        const now = new Date();
-        
-        // Create visitor record
-        const visitorData = {
-          device: device,
-          browser: browser,
-          userAgent: userAgent,
-          date: now.toISOString().split('T')[0],
-          time: now.toTimeString().split(' ')[0],
-          timestamp: now.toISOString(),
-          page: window.location.pathname
-        };
-        
-        // Save to Firebase
-        const visitorsRef = ref(db, 'visitors');
-        push(visitorsRef, visitorData);
-        
-        console.log('Visitor tracked:', visitorData);
-      } catch (e) {
-        console.error('Error tracking visitor:', e);
-      }
-    }, 1000);
-    
-    function getBrowser(ua) {
-      if (ua.includes('Chrome')) return 'Chrome';
-      if (ua.includes('Firefox')) return 'Firefox';
-      if (ua.includes('Safari')) return 'Safari';
-      if (ua.includes('Edge')) return 'Edge';
-      return 'Other';
+    // Track visitor immediately when page loads
+    try {
+      const app = getApp();
+      const db = getDatabase(app);
+      
+      // Get visitor info
+      const userAgent = navigator.userAgent;
+      const device = /Mobile|Android|iPhone|iPad|iPod/.test(userAgent) ? 'Mobile' : 'Desktop';
+      const browser = (function(ua) {
+        if (ua.includes('Chrome')) return 'Chrome';
+        if (ua.includes('Firefox')) return 'Firefox';
+        if (ua.includes('Safari')) return 'Safari';
+        if (ua.includes('Edge')) return 'Edge';
+        return 'Other';
+      })(userAgent);
+      
+      const now = new Date();
+      const visitorData = {
+        device: device,
+        browser: browser,
+        userAgent: userAgent,
+        date: now.toISOString().split('T')[0],
+        time: now.toTimeString().split(' ')[0],
+        timestamp: now.toISOString(),
+        page: window.location.pathname
+      };
+      
+      // Save to Firebase
+      const visitorsRef = ref(db, 'visitors');
+      push(visitorsRef, visitorData);
+      
+      console.log('✓ Visitor tracked:', visitorData);
+    } catch (e) {
+      console.error('Error tracking visitor:', e);
     }
   </script>
-
 </body>
 </html>
 
